@@ -13,10 +13,12 @@ for file in files:
             img = fp.read()
         img_chunk = img.split(b'\x00\x00\x00\x18\x66\x74\x79\x70\x6d\x70\x34\x32')
         if len(img_chunk) < 2:
-            continue
-        with open(os.path.join(path, file_name + '.mp4'), 'wb') as fp:
-            fp.write(b'\x00\x00\x00\x18\x66\x74\x79\x70\x6d\x70\x34\x32')
-            fp.write(img_chunk[-1])
+            continue        
+        for idx,chunk in enumerate(img_chunk[1:]):
+            with open(os.path.join(path, file_name + f'_{idx}.mp4'), 'wb') as fp:
+                fp.write(b'\x00\x00\x00\x18\x66\x74\x79\x70\x6d\x70\x34\x32')
+                fp.write(chunk)
+
 
     if ext_name.lower() in ['jpg', 'jpeg']:
         with open(os.path.join(path, file), 'rb') as fp:
@@ -24,6 +26,8 @@ for file in files:
         img_chunk = img.split(b'\x4d\x6f\x74\x69\x6f\x6e\x50\x68\x6f\x74\x6f\x5f\x44\x61\x74\x61')
         if len(img_chunk) < 2:
             continue
-        with open(os.path.join(path, file_name + '.mp4'), 'wb') as fp:
-            fp.write(img_chunk[-1])
+
+        for idx,chunk in enumerate(img_chunk[1:]):
+            with open(os.path.join(path, file_name + f'_{idx}.mp4'), 'wb') as fp:
+                fp.write(chunk)
 
